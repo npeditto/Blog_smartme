@@ -1,0 +1,32 @@
+version: '3.8'
+volumes:
+  database_data:
+    name: mysql_volume
+
+networks:
+  project_network:
+    driver: bridge
+
+services:
+  database:
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=siakoo
+      - MYSQL_USER=siakoo
+      - MYSQL_PASSWORD=siakoo
+    volumes:
+      - database_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - MYSQL_USER=siakoo
+      - MYSQL_PASSWORD=siakoo
+      - MYSQL_ROOT_PASSWORD=siakoo
+      - PMA_HOST=database
+    depends_on:
+      - database
