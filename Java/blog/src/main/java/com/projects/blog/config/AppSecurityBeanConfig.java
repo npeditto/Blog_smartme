@@ -22,7 +22,7 @@ public class AppSecurityBeanConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> repository.findByEmail(username).orElseThrow(
+        return username -> repository.findById(Long.parseLong(username)).orElseThrow(
                 ()->new UsernameNotFoundException("Utente non trovato.")
         );
     }

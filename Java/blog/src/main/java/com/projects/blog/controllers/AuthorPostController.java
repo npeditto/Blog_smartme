@@ -1,6 +1,7 @@
 package com.projects.blog.controllers;
 
 import com.projects.blog.controllers.request.AuthorPutRequest;
+import com.projects.blog.controllers.response.AuthorPatchResponse;
 import com.projects.blog.exceptionHandlers.exception.resource.ResourceNotFound;
 import com.projects.blog.models.Post;
 import com.projects.blog.models.User;
@@ -40,14 +41,16 @@ public class AuthorPostController
     }
 
     @PatchMapping
-    public ResponseEntity<EntityModel<PostDTO>> modifyAuthor(@PathVariable long id, @RequestBody @Valid AuthorPutRequest authorRequest) throws ResourceNotFound {
+    public AuthorPatchResponse modifyAuthor(@PathVariable long id, @RequestBody @Valid AuthorPutRequest authorRequest) throws ResourceNotFound {
         Post post = postService.getPost(id);
         User author = userService.getUser(authorRequest.getAutore());
         post.setAutore(author);
 
-        PostDTO postDTO = postMapper.toPostDTO(post);
         postService.update(id, post);
 
-        return ResponseEntity.ok(postDTOAssembler.toModel(postDTO));
+        AuthorPatchResponse authorPatchResponse = new AuthorPatchResponse();
+        authorPatchResponse.setAuthor(userMapper.toUserDTO(author));
+
+        return authorPatchResponse;
     }
 }
