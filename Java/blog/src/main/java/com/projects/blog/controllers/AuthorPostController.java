@@ -7,7 +7,7 @@ import com.projects.blog.models.User;
 import com.projects.blog.resources.PostDTO;
 import com.projects.blog.resources.UserDTO;
 import com.projects.blog.resources.hateoas.PostDTOAssembler;
-import com.projects.blog.resources.hateoas.UserDTOAssembler;
+import com.projects.blog.resources.hateoas.AuthorPostDTOAssembler;
 import com.projects.blog.services.interfaces.IPostService;
 import com.projects.blog.services.interfaces.IUserService;
 import com.projects.blog.utils.mappers.PostMapper;
@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/post/{id}/author")
-public class PostAuthorController
+public class AuthorPostController
 {
     private final IPostService postService;
     private final IUserService userService;
 
     private final PostMapper postMapper;
     private final UserMapper userMapper;
-    private final UserDTOAssembler userDTOAssembler;
+    private final AuthorPostDTOAssembler authorPostDTOAssembler;
     private final PostDTOAssembler postDTOAssembler;
 
     @GetMapping
@@ -36,7 +36,7 @@ public class PostAuthorController
         Post post = postService.getPost(id);
         UserDTO author = userMapper.toUserDTO(post.getAutore());
 
-        return ResponseEntity.ok(userDTOAssembler.toModel(author));
+        return ResponseEntity.ok(authorPostDTOAssembler.toModel(author));
     }
 
     @PatchMapping

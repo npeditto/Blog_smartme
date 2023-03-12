@@ -1,6 +1,6 @@
 package com.projects.blog.resources.hateoas;
 
-import com.projects.blog.controllers.PostAuthorController;
+import com.projects.blog.controllers.AuthorPostController;
 import com.projects.blog.controllers.PostController;
 import com.projects.blog.exceptionHandlers.exception.resource.ResourceNotFound;
 import com.projects.blog.resources.PostDTO;
@@ -29,7 +29,7 @@ public class PostDTOAssembler implements SimpleRepresentationModelAssembler<Post
             Link updRel = linkTo(methodOn(PostController.class).update(postID, null)).withRel("update");
             Link delRel = linkTo(methodOn(PostController.class).delete(postID)).withRel("delete");
 
-            Link authorRel = linkTo(methodOn(PostAuthorController.class).getAuthor(postID)).withRel("autore");
+            Link authorRel = linkTo(methodOn(AuthorPostController.class).getAuthor(postID)).withRel("autore");
 
             List<Link> arr = List.of(
                     selfRel,
