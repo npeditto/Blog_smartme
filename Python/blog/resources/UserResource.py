@@ -10,7 +10,7 @@ pathURI = "/user"
 
 class UserResource(Resource):
     def __new__(cls, *args, **kwargs):
-        from blog.HATEOAS.HATEOASGenerator import SchemaGenerator
+        from blog.hateoas.HATEOASGenerator import SchemaGenerator
 
         cls.schema = SchemaGenerator.generate(User, UserResource)()
 
@@ -35,7 +35,7 @@ class UserResource(Resource):
 
 class UserCollection(Resource):
     def __new__(cls, *args, **kwargs):
-        from blog.HATEOAS.HATEOASGenerator import SchemaGenerator
+        from blog.hateoas.HATEOASGenerator import SchemaGenerator
 
         cls.schema = SchemaGenerator.generate(User, UserResource)(many=True)
         return super(UserCollection, cls).__new__(cls)

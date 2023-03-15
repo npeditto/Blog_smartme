@@ -23,6 +23,7 @@ def ValidateSchema(schema):
                 instance.load(data, unknown=EXCLUDE)
             except ValidationError as e:
                 return make_response(jsonify({"error": e.messages}), 400)
+
             return fn(*args, **kwargs)
 
         return wrapped

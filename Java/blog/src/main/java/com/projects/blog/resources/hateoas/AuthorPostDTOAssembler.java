@@ -13,11 +13,21 @@ import java.util.Objects;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * Viene creato un oggetto che estende user, in questo caso
+ * l'overloading serve per definire le rel. sull'autore
+ */
 @Component
 public class AuthorPostDTOAssembler extends UserDTOAssembler {
 
     @Override
     public void addLinks(@NonNull EntityModel<UserDTO> user) {
+        /**
+         * Siccome ci si trova di fronte ad un autore bisogna anche aggiungere
+         * la possibilità di modificare quell'autore (PATCH), per questo motivo
+         * la classe UserDTOAssembler che contiene l'HATEOAS con self viene estesa
+         * e viene aggiunta la possibilità di modificare l'autore.
+         */
         super.addLinks(user);
 
         long userID = Objects.requireNonNull(user.getContent()).getUserID();

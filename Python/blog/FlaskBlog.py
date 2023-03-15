@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from blog.utils.RestAPI import RestAPI
 from blog.models.Database import db
 
-from blog.Mocker import Mocker
+from blog.utils.Mocker import Mocker
 
 from blog.resources.AuthResource import auth
 
@@ -54,5 +54,4 @@ class FlaskBlog(metaclass=Singleton):
         with self.app.app_context() as ctx:
             mocker = Mocker(100, 200)
             mocker.generate(ctx)
-
 

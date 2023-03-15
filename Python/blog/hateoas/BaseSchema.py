@@ -1,4 +1,4 @@
-from blog.HATEOAS.Marshmallow import ma
+from blog.hateoas.Marshmallow import ma
 from marshmallow import post_dump
 from os import environ
 

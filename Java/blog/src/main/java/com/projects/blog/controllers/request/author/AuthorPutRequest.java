@@ -1,4 +1,4 @@
-package com.projects.blog.controllers.request;
+package com.projects.blog.controllers.request.author;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AuthorPutRequest {
+    /**
+     * Oggetto creato ad-hoc per la validazione delle richieste fatte con il metodo
+     * PUT alla risorsa Author
+     */
     @NotNull
     @DecimalMin(value = "1", message = "Il campo autore deve essere presente e valido.")
     private long autore;

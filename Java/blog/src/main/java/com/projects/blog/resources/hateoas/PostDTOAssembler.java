@@ -21,12 +21,20 @@ public class PostDTOAssembler implements SimpleRepresentationModelAssembler<Post
     public void addLinks(@NonNull EntityModel<PostDTO> resource) {
         PostDTO post = Objects.requireNonNull(resource).getContent();
 
+        /**
+         * Aggiunta dell'HATEOAS per la risorsa post, quindi aggiungo self,
+         * create, update, delete, autore.
+         */
+
         try {
             long postID = Objects.requireNonNull(post).getPost_id();
 
             Link selfRel = linkTo(methodOn(PostController.class).getPostByID(postID)).withSelfRel();
+
             Link createRel = linkTo(methodOn(PostController.class).createPost(null)).withRel("create");
+
             Link updRel = linkTo(methodOn(PostController.class).update(postID, null)).withRel("update");
+
             Link delRel = linkTo(methodOn(PostController.class).delete(postID)).withRel("delete");
 
             Link authorRel = linkTo(methodOn(AuthorPostController.class).getAuthor(postID)).withRel("autore");

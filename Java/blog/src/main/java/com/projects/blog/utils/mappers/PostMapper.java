@@ -14,6 +14,9 @@ public class PostMapper extends ModelMapperUtil {
         super(modelMapper);
     }
 
+    /**
+     * @param post Post da convertire in PostDTO (rappresentazione della risorsa Post)
+     */
     public PostDTO toPostDTO(Post post){
         return this.map(post, PostDTO.class);
     }

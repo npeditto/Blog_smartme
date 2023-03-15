@@ -1,5 +1,5 @@
-from blog.HATEOAS.BaseSchema import BaseSchema
-from blog.HATEOAS.Marshmallow import ma
+from blog.hateoas.BaseSchema import BaseSchema
+from blog.hateoas.Marshmallow import ma
 
 from blog.utils.Helpers import getCrudMethods
 
@@ -8,19 +8,19 @@ import inspect
 
 class SchemaGenerator:
     @classmethod
-    def getCrudMapping(cls):
+    def getCrudMethMapping(cls):
         # Metodi CRUD mappati sulle relazioni crud
         return {
             "get": "self",
             "post": "create",
             "put": "update",
             "delete": "delete",
-            "patch" : "patch"
+            "patch": "patch"
         }
 
     @classmethod
     def getCrudMethods(cls, class_):
-        crudOps = cls.getCrudMapping()
+        crudOps = cls.getCrudMethMapping()
 
         # Mappa tra un il nome di metodo di istanza della classe e il suo riferimento
         crudMethods = getCrudMethods(class_)

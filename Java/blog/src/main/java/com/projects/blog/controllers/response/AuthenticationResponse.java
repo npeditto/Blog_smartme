@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AuthenticationResponse {
+    /**
+     * Risposta restituita quando viene richiesto un token, viene anche inclusa la data di scadenza del token.
+     */
     private String token;
     private String expire_date;
 

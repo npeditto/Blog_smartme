@@ -7,13 +7,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+
 
 @RequiredArgsConstructor
 public class UserGenerator implements Runnable {
@@ -28,26 +27,16 @@ public class UserGenerator implements Runnable {
 
     @Override
     public void run() {
-        // Primo Utente -- Usato per autenticare
-
         final String password = new BCryptPasswordEncoder().encode("password");
 
-        User principal = User.builder()
-                .nome("Emanuele")
-                .cognome("Pannuccio")
-                .email("pannuccio93@gmail.com")
-                .password(password)
-                .data_nascita(LocalDate.now().minusYears(22))
-                .build();
-
-        users.add(principal);
-
+        // Generazione dei dati fake
         Faker faker = new Faker();
         String[] domains = {"hotmail.com", "outlook.it", "live.it", "yahoo.com", "gmail.com"};
 
         Set<String> uniqueEmails = new HashSet<>();
 
-
+        // Per generare una quantità esatta di email e garantire univocità verrà effettuato un ciclo fino a quando il
+        // set (insieme senza ripetizioni) sia uguale in dimensione al numero di utenti richiesti
         do{
             final String firstName = faker.name().firstName();
             final String lastName = faker.name().lastName();
@@ -58,24 +47,36 @@ public class UserGenerator implements Runnable {
 
         ThreadPoolExecutor poolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 
+        // Converto il set in lista
         List<String> emailList = uniqueEmails.stream().toList();
 
+        // Generazione dei task da assegnare alla coda
         for (int i = 0; i < quantity; i++) {
             int finalI = i;
+
+            // Task
             poolExecutor.execute(() -> {
                 final String firstName = faker.name().firstName();
                 final String lastName = faker.name().lastName();
                 final String email = emailList.get(finalI);
                 final LocalDate dataNascita = faker.date().birthday(18, 60).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-                User user = User.builder()
-                        .nome(firstName)
-                        .cognome(lastName)
-                        .email(email)
-                        .password(password)
-                        .data_nascita(dataNascita)
-                        .build();
+                // Public ID scelto per non mostrare nel subj del token l'id reale (ai fini di sicurezza, proteggo il meccanismo
+                // che sta dietro la generazione degli ID).
+                String uuid = UUID.randomUUID().toString().replace("-", "");
 
+                // Costruisco l'utente
+
+                User user = User.builder()
+                                .nome(firstName)
+                                .cognome(lastName)
+                                .email(email)
+                                .password(password)
+                                .data_nascita(dataNascita)
+                                .publicID(uuid)
+                                .build();
+
+                // Aggiungo l'utente alla lista che poi verrà caricata nel database
                 users.add(user);
             });
         }

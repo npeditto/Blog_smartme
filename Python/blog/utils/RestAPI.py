@@ -18,6 +18,7 @@ class RestAPI:
         """
         exceptions = getClassesFromPath("blog/exception")
         errors = {}
+
         for exception, exceptionClass in exceptions:
             obj = exceptionClass()
             """
@@ -25,6 +26,7 @@ class RestAPI:
                 verranno restituiti come risposta alla richiesta che
                 ha scatenato il lancio dell'errore.
             """
+
             errors[exception] = {
                 "message": obj.message,
                 "status": obj.status

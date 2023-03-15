@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Esposizione delle funzionalità legate alla repository di Post. Sarà questa a permettere
+ * l'interazione con gli oggetti Post. Implemento le interfacce cosi posso utilizzare il meccanismo
+ * di Spring per un cambio rapido delle classi (Dipendency Injection + Qualifier).
+ */
 @Service
 @RequiredArgsConstructor
 public class PostService implements IPostService {

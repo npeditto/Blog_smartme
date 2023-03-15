@@ -15,13 +15,13 @@ pathURI = "/post/<post_id>/author"
 
 class AuthorResource(Resource):
     def __new__(cls, *args, **kwargs):
-        from blog.HATEOAS.HATEOASGenerator import SchemaGenerator
+        from blog.hateoas.HATEOASGenerator import SchemaGenerator
         cls.schema = SchemaGenerator.generate(User, AuthorResource)()
         return super(AuthorResource, cls).__new__(cls)
 
     @classmethod
     def relationships(cls):
-        from blog.HATEOAS.Marshmallow import ma
+        from blog.hateoas.Marshmallow import ma
 
         return {
             "post": ma.URLFor('postresource.get', values={"post_id": "<post_id>"})

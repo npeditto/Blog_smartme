@@ -102,6 +102,8 @@ def getCrudMappingURI(path) -> dict:
             args = set(inspect.getfullargspec(methodRef).args) - {"self", "current_user"}
             args = list(args)
             URI = cls.path()
+
+            # Riguarda.
             for argument in args:
                 if "<" + argument + ">" not in URI:
                     URI += "/<%s>" % argument

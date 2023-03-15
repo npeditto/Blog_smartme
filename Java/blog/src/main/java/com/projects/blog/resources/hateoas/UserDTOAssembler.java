@@ -15,8 +15,11 @@ import java.util.Objects;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+// Implemento l'interfaccia per rappresentare la risorsa e costruire l'hateoas.
 @Component
 public class UserDTOAssembler implements SimpleRepresentationModelAssembler<UserDTO> {
+
+    // Metodo invocato per
     @Override
     public void addLinks(@NonNull EntityModel<UserDTO> user) {
         long userID = Objects.requireNonNull(user.getContent()).getUserID();

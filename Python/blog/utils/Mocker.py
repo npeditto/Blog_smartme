@@ -76,4 +76,3 @@ class Mocker:
 
                 db.session.add(post)
                 db.session.commit()
-
