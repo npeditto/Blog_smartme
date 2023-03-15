@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 from blog.models.User import User
 from blog.models.Post import Post
@@ -37,18 +38,23 @@ class Mocker:
             db.drop_all()
             db.create_all()
 
+            uniqueID = str(uuid.uuid4()).replace("-", "")
             user = User(
                 nome="Emanuele",
                 cognome="Pannuccio",
                 email="pannuccio93@gmail.com",
                 password=password,
-                data_nascita=datetime.today() - timedelta(days=22 * 365)
+                data_nascita=datetime.today() - timedelta(days=22 * 365),
+                public_id=uniqueID
             )
 
             db.session.add(user)
             db.session.commit()
 
             for _ in range(self.usersQta):
+                # La generazione di un UUID permette di impedire all'utente di vedere la logica di generazione
+                uniqueID = str(uuid.uuid4()).replace("-", "")
+
                 nome, cognome = fake.first_name(), fake.last_name()
                 email = choice(emailsList)
                 user = User(
@@ -56,7 +62,8 @@ class Mocker:
                     cognome=cognome,
                     email=email,
                     password=password,
-                    data_nascita=datetime.today() - timedelta(days=randint(18, 50) * 365)
+                    data_nascita=datetime.today() - timedelta(days=randint(18, 50) * 365),
+                    public_id=uniqueID
                 )
 
                 # Rimuovo la mail dalla lista al fine di assicurarmene l'univocità della sua esistenza.

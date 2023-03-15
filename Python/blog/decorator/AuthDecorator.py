@@ -33,7 +33,7 @@ def authenticated(func):
             data = jwt.decode(token, os.environ.get("SECRET_KEY"), algorithms=["HS256"])
 
             # Prelevo l'utente che ha tentato l'autenticazione, in questo modo posso fare operazioni "protette"
-            current_user = User.query.filter_by(user_id=data["sub"]).first()
+            current_user = User.query.filter_by(public_id=data["sub"]).first()
 
             if not current_user:
                 raise TokenInvalidException()

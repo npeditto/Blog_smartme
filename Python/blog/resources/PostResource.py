@@ -49,7 +49,7 @@ class PostResource(Resource):
         db.session.delete(post)
         db.session.commit()
 
-        return jsonify({"ok" : "Resource deleted."})
+        return jsonify({"ok" : "Risorsa eliminata."})
 
     """
         Viene autenticata la richiesta e poi viene verificato lo schema

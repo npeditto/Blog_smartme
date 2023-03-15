@@ -1,4 +1,10 @@
+import os
+
+import pytz
+from pytz import timezone
+import uuid
 from os import environ
+from time import time
 
 import datetime
 import jwt
@@ -12,7 +18,6 @@ from blog.models.User import User
 from blog.decorator.ValidateSchema import ValidateSchema
 from blog.resources.validation.LoginSchema import LoginSchema
 from blog.resources.validation.RegisterSchema import RegisterSchema
-
 
 """
     Creazione di un Blueprint al fine di impostare una serie di informazioni
@@ -33,12 +38,15 @@ def register():
     data = request.json
     hashed_password = generate_password_hash(data["password"], method="sha256")
 
+    uniqueID = str(uuid.uuid4()).replace("-", "")
+
     user = User(
         email=data["email"],
         password=hashed_password,
         nome=data["nome"],
         cognome=data["cognome"],
-        data_nascita=data["data_nascita"]
+        data_nascita=data["data_nascita"],
+        public_id=uniqueID
     )
 
     try:
@@ -57,15 +65,17 @@ def login():
     user = User.query.filter_by(email=data["email"]).first()
 
     if not user or not check_password_hash(user.password, data["password"]):
-        return jsonify({"error": "Credenziali errate."}), 400
+        return jsonify({"error": "Le credenziali inserite risultano sbagliate."}), 400
 
+    expire_date = datetime.datetime.now() + datetime.timedelta(hours=1)
     token = jwt.encode(
         payload={
-            "sub": user.user_id,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1)
+            "sub": user.public_id,
+            "exp": expire_date
         },
         key=environ.get("SECRET_KEY").encode(),
         algorithm="HS256"
     )
 
-    return jsonify({"token": token})
+    return jsonify({"token": token, "expire_date": expire_date.strftime("%d/%m/%Y %H:%M:%S")})
+

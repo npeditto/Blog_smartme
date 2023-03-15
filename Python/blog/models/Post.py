@@ -9,4 +9,6 @@ class Post(db.Model):
 
     autore = db.Column(db.BigInteger, db.ForeignKey("users.user_id"), nullable=False)
 
-    public_attribute = ("post_id", "contenuto", "_links")
+    # Attributi pubblici che sono restituibili all'utente come risposta, sono utilizzati per
+    # la costruzione della rappresentazione della risorsa.
+    public_attribute = ("contenuto", "_links")

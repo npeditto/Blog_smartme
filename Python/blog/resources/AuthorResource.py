@@ -40,7 +40,7 @@ class AuthorResource(Resource):
         author = User.query.get(post.autore)
 
         if not author:
-            return make_response(jsonify({"error" : "User not found."}), 400)
+            return make_response(jsonify({"error": "User not found."}), 400)
 
         setattr(author, "post_id", post_id)
 

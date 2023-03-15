@@ -12,6 +12,10 @@ class User(db.Model):
 
     data_nascita = db.Column(db.Date, nullable=False)
 
+    public_id = db.Column(db.String(255), nullable=False)
+
     posts = db.relationship("Post", backref="users")
+
+
 
     public_attribute = ("email", "nome", "cognome", "data_nascita", "_links")
