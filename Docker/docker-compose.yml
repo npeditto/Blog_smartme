@@ -19,7 +19,9 @@ services:
       - 3306:3306
     volumes:
       - database_data:/var/lib/mysql
-
+    networks:
+        - project_network
+  
   phpmyadmin:
     image: phpmyadmin:latest
     restart: always
@@ -32,3 +34,23 @@ services:
       - PMA_HOST=database
     depends_on:
       - database
+    networks:
+        - project_network
+
+  flask:
+    build: ./build/flask
+    restart: always
+    ports:
+      - "8082:5000"
+    volumes:
+      - ./python:/usr/src/app
+    networks:
+      - project_network
+
+  spring:
+    build: ./build/spring
+    restart: always
+    ports:
+      - "8083:80"
+    networks:
+      - project_network
