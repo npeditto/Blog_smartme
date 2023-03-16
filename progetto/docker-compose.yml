@@ -43,6 +43,8 @@ services:
       - "8082:5000"
     volumes:
       - ./python:/usr/src/app
+    depends_on:
+      - database
     networks:
       - project_network
 
@@ -50,6 +52,8 @@ services:
     build: ./build/spring
     ports:
       - "8083:8080"
+    depends_on:
+      - database
     networks:
       - project_network
     environment:
