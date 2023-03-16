@@ -36,12 +36,11 @@ services:
 
   flask:
     build: ./build/flask
+    restart: on-failure
     ports:
       - "8082:5000"
     volumes:
       - ./python:/usr/src/app
-    depends_on:
-      - database_python
     environment:
       - DB_HOSTNAME=database_python
       - DB_NAME=blog
@@ -54,12 +53,11 @@ services:
     build: ./build/spring
     ports:
       - "8083:8080"
-    depends_on:
-      - database_java
-    networks:
-      - project_network
+    restart: on-failure
     environment:
       - DB_HOSTNAME=database_java
       - DB_NAME=blog
       - DB_USERNAME=root
       - DB_PASSWORD=siakoo
+    networks:
+      - project_network
