@@ -1,39 +1,36 @@
 version: '3.8'
 volumes:
-  database_data:
-    name: mysql_volume
+  vol_database_python:
+  vol_database_java:
 
 networks:
   project_network:
     driver: bridge
 
 services:
-  database:
+  database_python:
     image: mysql:latest
-    restart: always
+    restart: unless-stopped
     environment:
+      - MYSQL_DATABASE=blog
       - MYSQL_ROOT_PASSWORD=siakoo
-      - MYSQL_USER=siakoo
-      - MYSQL_PASSWORD=siakoo
-    ports:
-      - 3306:3306
     volumes:
-      - database_data:/var/lib/mysql
+        - vol_database_python:/var/lib/mysql
+    ports:
+      - 3307:3306
     networks:
         - project_network
-  
-  phpmyadmin:
-    image: phpmyadmin:latest
-    restart: always
-    ports:
-      - 8081:80
+
+  database_java:
+    image: mysql:latest
+    restart: unless-stopped
     environment:
-      - MYSQL_USER=siakoo
-      - MYSQL_PASSWORD=siakoo
+      - MYSQL_DATABASE=blog
       - MYSQL_ROOT_PASSWORD=siakoo
-      - PMA_HOST=database
-    depends_on:
-      - database
+    volumes:
+        - vol_database_java:/var/lib/mysql
+    ports:
+      - 3306:3306
     networks:
         - project_network
 
@@ -44,7 +41,12 @@ services:
     volumes:
       - ./python:/usr/src/app
     depends_on:
-      - database
+      - database_python
+    environment:
+      - DB_HOSTNAME=database_python
+      - DB_NAME=blog
+      - DB_USERNAME=root
+      - DB_PASSWORD=siakoo
     networks:
       - project_network
 
@@ -53,8 +55,11 @@ services:
     ports:
       - "8083:8080"
     depends_on:
-      - database
+      - database_java
     networks:
       - project_network
     environment:
-      - DATABASE_HOSTNAME=database
+      - DB_HOSTNAME=database_java
+      - DB_NAME=blog
+      - DB_USERNAME=root
+      - DB_PASSWORD=siakoo
