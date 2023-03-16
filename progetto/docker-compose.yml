@@ -1,0 +1,56 @@
+version: '3.8'
+volumes:
+  database_data:
+    name: mysql_volume
+
+networks:
+  project_network:
+    driver: bridge
+
+services:
+  database:
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=siakoo
+      - MYSQL_USER=siakoo
+      - MYSQL_PASSWORD=siakoo
+    ports:
+      - 3306:3306
+    volumes:
+      - database_data:/var/lib/mysql
+    networks:
+        - project_network
+  
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - MYSQL_USER=siakoo
+      - MYSQL_PASSWORD=siakoo
+      - MYSQL_ROOT_PASSWORD=siakoo
+      - PMA_HOST=database
+    depends_on:
+      - database
+    networks:
+        - project_network
+
+  flask:
+    build: ./build/flask
+    ports:
+      - "8082:5000"
+    volumes:
+      - ./python:/usr/src/app
+    networks:
+      - project_network
+
+  spring:
+    build: ./build/spring
+    ports:
+      - "8083:8080"
+    networks:
+      - project_network
+    environment:
+      - DATABASE_HOSTNAME=database
